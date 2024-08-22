@@ -43,6 +43,7 @@ from .const import (
     ATTR_HEIGHT,
     ATTR_LAST_NAME,
     ATTR_NOTE,
+    ATTR_TAGS,
     ATTR_NOTES,
     ATTR_PICTURE,
     ATTR_PUMPING,
@@ -103,6 +104,7 @@ async def async_setup_entry(
             vol.Optional(ATTR_COLOR): vol.In(DIAPER_COLORS),
             vol.Optional(ATTR_AMOUNT): cv.positive_float,
             vol.Optional(ATTR_NOTES): cv.string,
+            vol.Optional(ATTR_TAGS): cv.ensure_list,
         },
         "async_add_diaper_change",
     )
@@ -237,6 +239,7 @@ class BabyBuddySensor(CoordinatorEntity, SensorEntity):
         color: str | None = None,
         amount: float | None = None,
         notes: str | None = None,
+        tags: list | None = None,
     ) -> None:
         """Add diaper change entry."""
         if not isinstance(self, BabyBuddyChildSensor):
@@ -261,6 +264,8 @@ class BabyBuddySensor(CoordinatorEntity, SensorEntity):
             data[ATTR_AMOUNT] = amount
         if notes:
             data[ATTR_NOTES] = notes
+        if tags:
+            data[ATTR_TAGS] = tags
 
         date_time_now = get_datetime_from_time(dt_util.now())
         await self.coordinator.client.async_post(ATTR_CHANGES, data, date_time_now)

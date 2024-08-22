@@ -111,6 +111,12 @@ add_diaper_change:
       selector:
         text:
           multiline: true
+    tags:
+      name: Tags
+      selector:
+        text:
+          type: text
+          multiple: true
 
 add_feeding:
   name: Add feeding
